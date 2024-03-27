@@ -4,3 +4,5 @@ scikit-learn
 black
 pylint
 omegaconf
+matplotlib
+seaborn

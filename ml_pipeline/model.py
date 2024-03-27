@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 
 from abc import ABC, abstractmethod
 
-class Model(ABS):
+class Model(ABC):
     _model: None 
 
     @property
