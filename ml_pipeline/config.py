@@ -43,7 +43,7 @@ class Config:
         return OmegaConf.to_yaml(self.items)
 
 if __name__ == "__main__":
-    config = Config("ml_pipeline_project/config", "iris_classification")
+    config = Config("config", "iris_classification")
     config.load()
     print(config)
 
