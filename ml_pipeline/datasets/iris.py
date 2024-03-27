@@ -56,10 +56,10 @@ class IrisDataset(CSVMixin, Dataset):
             List[str]: Updated list of features to be used in training.
         """
         self.df["sepal_area"] = (
-            self.df["sepal_area"].abs() * self.df["sepal_width"].abs()
+            self.df["sepal_length"].abs() * self.df["sepal_width"].abs()
         )
         self.df["petal_area"] = (
-            self.df["petal_area"].abs() * self.df["petal_width"].abs()
+            self.df["petal_length"].abs() * self.df["petal_width"].abs()
         )
         # return tha list with original and new features
         return features + ["sepal_area", "petal_area"]
