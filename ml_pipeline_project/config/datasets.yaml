@@ -1,0 +1,5 @@
+# data config
+datasets:
+ iris:
+   # data directory path
+   path: "iris.data"
