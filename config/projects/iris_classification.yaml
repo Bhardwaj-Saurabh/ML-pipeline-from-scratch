@@ -1,9 +1,7 @@
-# project config
-
 project:
   name: iris_classification
 
-  datasets: iris
+  dataset: iris
 
   model:
     name: iris_classifier
@@ -19,30 +17,23 @@ project:
   target: species
 
   training:
-      test_split: 0.3
+    test_split: 0.3
 
   tasks:
     load_data:
       next:
         - preprocess_data
-    
     preprocess_data:
       next:
         - feature_engineer_data
-    
     feature_engineer_data:
       next:
         - train_model
-
     train_model:
       next:
         - evaluate_model
-
     evaluate_model:
-      next: 
+      next:
         - create_report
-
-    create_plots:
+    create_report:
       next: []
-           
-   
