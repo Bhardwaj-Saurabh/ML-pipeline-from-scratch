@@ -6,3 +6,4 @@ pylint
 omegaconf
 matplotlib
 seaborn
+joblib
