@@ -1,0 +1,61 @@
+import logging
+import time
+
+class Logger:
+    """Logger class.
+
+    Usage example:
+        logger = Logger("ml-pipeline", debug=True).get()
+    """
+
+    def __init__(self, name: str, debug: bool = False):
+        """Create and set up the logger.
+        Args:
+            name (str): Name of logger.
+            debug (bool): Log debug messages in console.
+        Returns:
+            logging.Logger: Logger object.
+        """
+
+        self.logger = logging.getLogger(name)
+
+        # set the min logging level
+        self.logger.setLevel(logging.DEBUG)
+
+        # set console level logging
+        if debug:
+            console_level = logging.DEBUG
+        else:
+            console_level = logging.INFO
+
+        # ser up consple handler
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(console_level)
+
+        # for console logs, just use level name and message
+        console_handler.SetFormatter(
+            logging.Formatter("%(levelname)s: %(message)s")
+        )
+
+        self.logger.addHandler(console_handler)
+
+        # set up file handler
+        file_handler = logging.FileHandler("/tmp/ml_pipeline.log")
+        file_handler.setLevel(logging.DEBUG)
+
+        # for file logs and get more details 
+        formatter = logging.Formatter(
+            "%(asctime)s:%(name)s:%(levelname)s: %(message)s"
+        )
+
+        # show time 
+        formatter.converter = time.gmtime
+        file_handler.SetFormatter(formatter)
+        self.logger.addHandler(file_handler)
+
+
+    def get(self) -> "logging.Logger":
+        """
+        Get a prepared logger object
+        """
+        return self.logger
