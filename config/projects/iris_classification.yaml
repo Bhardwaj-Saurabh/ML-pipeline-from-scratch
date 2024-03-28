@@ -39,8 +39,8 @@ project:
         - evaluate_model
 
     evaluate_model:
-      next:
-        - create_plots
+      next: 
+        - create_report
 
     create_plots:
       next: []

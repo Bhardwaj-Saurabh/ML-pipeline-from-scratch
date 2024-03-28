@@ -18,9 +18,9 @@ class ModelFactory:
         name: str,
         model_params: "DictConfig",
         training_params: "DictConfig",
-        artefact_dir: str,
+        artifact_dir: str,
         logger: "logging.Logger",
     ) -> "Model":
         return self.models[name](
-            model_params, training_params, artefact_dir, logger=logger
+            model_params, training_params, artifact_dir, logger=logger
         )

@@ -33,7 +33,7 @@ class Logger:
         console_handler.setLevel(console_level)
 
         # for console logs, just use level name and message
-        console_handler.SetFormatter(
+        console_handler.setFormatter(
             logging.Formatter("%(levelname)s: %(message)s")
         )
 
@@ -50,7 +50,7 @@ class Logger:
 
         # show time 
         formatter.converter = time.gmtime
-        file_handler.SetFormatter(formatter)
+        file_handler.setFormatter(formatter)
         self.logger.addHandler(file_handler)
 
 

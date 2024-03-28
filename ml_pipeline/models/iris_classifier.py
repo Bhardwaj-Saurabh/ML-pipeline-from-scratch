@@ -13,21 +13,23 @@ if TYPE_CHECKING:
 
     from omegaconf import DictConfig
 
-
 from ml_pipeline.mixins.reporting_mixin import ReportingMixin
 from ml_pipeline.mixins.training_mixin import TrainingMixin
 from ml_pipeline.model import Model
 
+
 class IrisClassifier(TrainingMixin, Model, ReportingMixin):
     def __init__(
-        self, 
+        self,
         model_params: "DictConfig",
         training_params: "DictConfig",
-        artifact_dir: str, 
+        artifact_dir: str,
+        logger: "logging.Logger" = None,
     ) -> None:
         self.model = LogisticRegression(**model_params)
         self.training_params = training_params
         self.artifact_dir = artifact_dir
+        self.logger = logger
 
     def load(self, model_path: str) -> None:
         self.model = load(model_path)
@@ -35,21 +37,22 @@ class IrisClassifier(TrainingMixin, Model, ReportingMixin):
     def _encode_train_data(
         self, X: "pd.DataFrame" = None, y: "pd.Series" = None
     ) -> Tuple["pd.DataFrame", "pd.Series"]:
+        # we are not encoding X because it is not needed for our dataset
 
-        # encode y 
-        le =LabelEncoder()
+        le = LabelEncoder()
         y = le.fit_transform(y)
 
-        # build encoding dict 
+        # build the encoding dictionary, converting numpy.int64 values to
+        # python ints
         self.encodings = dict(
             zip(le.classes_, [int(i) for i in le.transform(le.classes_)])
         )
+        self.logger.debug(self.encodings)
 
         filename = f"{self.artifact_dir}/encodings.json"
         with open(filename, "w") as f:
             json.dump(self.encodings, f)
-        
-        print(f"Saved {filename}")
+        self.logger.debug(f"Saved {filename}.")
 
         return X, y
 
@@ -69,14 +72,14 @@ class IrisClassifier(TrainingMixin, Model, ReportingMixin):
     def create_report(self) -> None:
         self.save_metrics()
         self.plot_confusion_matrix(
-            xticklables = self.encoding.keys(),
-            yticklabels = self.encoding.keys(),
+            xticklabels=self.encodings.keys(),
+            yticklabels=self.encodings.keys(),
         )
 
     def save(self) -> None:
         filename = f"{self.artifact_dir}/model.joblib"
         dump(self.model, filename)
-        print(f"Saved {filename}")
+        self.logger.debug(f"Saved {filename}.")
 
     def predict(self, X: "pd.DataFrame") -> int:
         return self.model.predict(X)
